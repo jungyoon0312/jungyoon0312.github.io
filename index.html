@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로또 당첨금 세금 계산기 | 실수령액 바로 계산</title>
+<meta name="description" content="로또·복권 당첨금에서 세금을 떼고 실제로 받는 실수령액을 바로 계산합니다. 200만원 이하 비과세, 3억 이하 22%, 3억 초과 33% 세율을 정확하게 반영했습니다.">
+<meta name="keywords" content="로또 세금 계산기, 로또 실수령액, 복권 세금, 당첨금 세금, 로또 1등 실수령액">
+<meta property="og:title" content="로또 당첨금 세금 계산기 | 실수령액 바로 계산">
+<meta property="og:description" content="당첨금만 입력하면 세금과 실수령액을 정확하게 계산해 드려요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"/>
+<style>
+  :root{
+    --paper:#f6f1e7;
+    --paper-2:#efe7d6;
+    --ink:#1d2a26;
+    --ink-soft:#43564f;
+    --gold:#bd9b3e;
+    --gold-deep:#9a7c28;
+    --green:#1f4d3f;
+    --green-2:#2c6b56;
+    --red:#9c3b2e;
+    --line:#d8cdb6;
+    --shadow:0 18px 50px -22px rgba(29,42,38,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #fbf7ee 0%, var(--paper) 45%, var(--paper-2) 100%);
+    color:var(--ink);
+    line-height:1.6;
+    min-height:100vh;
+    padding:clamp(16px,4vw,48px) 16px 64px;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{width:100%;max-width:560px}
+
+  /* header */
+  .topmark{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;letter-spacing:.18em;color:var(--gold-deep);
+    text-transform:uppercase;font-weight:700;margin-bottom:14px;
+    opacity:0;animation:rise .7s .05s forwards;
+  }
+  .topmark::before{content:"";width:26px;height:1.5px;background:var(--gold)}
+  h1{
+    font-family:"Gowun Batang",serif;font-weight:700;
+    font-size:clamp(30px,7vw,42px);line-height:1.15;color:var(--ink);
+    letter-spacing:-.01em;margin-bottom:10px;
+    opacity:0;animation:rise .7s .12s forwards;
+  }
+  h1 em{font-style:normal;color:var(--green-2)}
+  .lede{
+    color:var(--ink-soft);font-size:15px;max-width:42ch;margin-bottom:30px;
+    opacity:0;animation:rise .7s .19s forwards;
+  }
+
+  /* card */
+  .card{
+    background:#fffdf8;border:1px solid var(--line);border-radius:22px;
+    padding:clamp(22px,5vw,32px);box-shadow:var(--shadow);
+    opacity:0;animation:rise .7s .26s forwards;
+  }
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);
+    letter-spacing:.02em;margin-bottom:10px}
+  .inputbox{position:relative;display:flex;align-items:center;
+    border:1.5px solid var(--line);border-radius:14px;background:#fff;
+    transition:border-color .2s,box-shadow .2s;overflow:hidden}
+  .inputbox:focus-within{border-color:var(--green-2);
+    box-shadow:0 0 0 4px rgba(44,107,86,.12)}
+  #amt{
+    flex:1;border:0;outline:0;background:transparent;
+    font-family:"Gowun Batang",serif;font-weight:700;
+    font-size:clamp(26px,7vw,34px);color:var(--ink);
+    padding:16px 6px 16px 18px;width:100%;text-align:right;
+    font-variant-numeric:tabular-nums;
+  }
+  .unit{font-family:"Gowun Batang",serif;font-size:22px;font-weight:700;
+    color:var(--ink-soft);padding:0 18px 0 4px}
+  .read{min-height:20px;margin-top:10px;font-size:14px;color:var(--green-2);
+    font-weight:600;text-align:right;letter-spacing:.01em}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .chip{
+    border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+    font-family:inherit;font-size:13px;font-weight:600;
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    transition:all .18s;
+  }
+  .chip:hover{border-color:var(--gold);color:var(--gold-deep);
+    transform:translateY(-1px)}
+  .chip:active{transform:translateY(0)}
+
+  /* result */
+  .result{margin-top:26px;border-radius:18px;overflow:hidden;
+    background:linear-gradient(160deg,var(--green) 0%,#16382e 100%);
+    color:#f3eee0;box-shadow:0 16px 40px -20px rgba(31,77,63,.8)}
+  .result-net{padding:26px 24px 22px;text-align:center;position:relative}
+  .result-net::after{content:"";position:absolute;left:24px;right:24px;bottom:0;
+    height:1px;background:rgba(243,238,224,.14)}
+  .result-net .cap{font-size:13px;letter-spacing:.12em;color:var(--gold);
+    font-weight:700;text-transform:uppercase}
+  .bignum{font-family:"Gowun Batang",serif;font-weight:700;
+    font-size:clamp(34px,9vw,48px);line-height:1.1;margin:8px 0 4px;
+    color:#fdfbf3;font-variant-numeric:tabular-nums}
+  .bigread{font-size:14px;color:#cfd9d1}
+  .grid2{display:grid;grid-template-columns:1fr 1fr}
+  .gcell{padding:18px 22px;text-align:center}
+  .gcell:first-child{border-right:1px solid rgba(243,238,224,.14)}
+  .gcell .cap{font-size:12px;letter-spacing:.06em;color:#a9bcb2;font-weight:600}
+  .gcell .v{font-family:"Gowun Batang",serif;font-size:22px;font-weight:700;
+    margin-top:4px;font-variant-numeric:tabular-nums}
+  .gcell .v.tax{color:#e7a99a}
+
+  /* breakdown */
+  .break{margin-top:6px;border:1px solid var(--line);border-radius:14px;
+    background:#fffdf8;overflow:hidden;display:none}
+  .break.show{display:block;animation:fade .4s}
+  .brow{display:flex;justify-content:space-between;align-items:center;
+    padding:13px 18px;font-size:14px;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .lab{color:var(--ink-soft)}
+  .brow .val{font-weight:700;font-variant-numeric:tabular-nums}
+  .brow.total{background:var(--paper);font-size:15px}
+  .brow.total .val{color:var(--green)}
+  .muted{color:#a99f88;font-weight:500}
+
+  details{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;
+    opacity:0;animation:rise .7s .33s forwards}
+  summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--green-2);
+    list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:"Gowun Batang",serif;font-size:18px;
+    width:18px;display:inline-block}
+  details[open] summary::before{content:"–"}
+  .info{font-size:14px;color:var(--ink-soft);margin-top:14px}
+  .info h3{font-size:14px;color:var(--ink);margin:16px 0 6px;font-weight:700}
+  .info ul{padding-left:18px;margin:6px 0}
+  .info li{margin:4px 0}
+  .info table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+  .info th,.info td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  .info th{background:var(--paper);font-weight:700}
+
+  footer{margin-top:26px;font-size:12.5px;color:#a99f88;line-height:1.6;
+    text-align:center;opacity:0;animation:rise .7s .4s forwards}
+  footer a{color:var(--gold-deep)}
+
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topmark">실수령액 계산기</div>
+  <h1>로또 당첨금<br><em>세금 계산기</em></h1>
+  <p class="lede">당첨금만 입력하면 떼이는 세금과 실제로 손에 쥐는 금액을 정확하게 계산해 드려요.</p>
+
+  <div class="card">
+    <label for="amt">당첨금을 입력하세요</label>
+    <div class="inputbox">
+      <input id="amt" type="text" inputmode="numeric" placeholder="0" autocomplete="off" aria-label="당첨금">
+      <span class="unit">원</span>
+    </div>
+    <div class="read" id="read"></div>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="result" id="result" style="display:none">
+      <div class="result-net">
+        <div class="cap">실수령액</div>
+        <div class="bignum" id="net">0원</div>
+        <div class="bigread" id="netread"></div>
+      </div>
+      <div class="grid2">
+        <div class="gcell">
+          <div class="cap">총 세금</div>
+          <div class="v tax" id="tax">0원</div>
+        </div>
+        <div class="gcell">
+          <div class="cap">실효세율</div>
+          <div class="v" id="rate">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="break" id="break"></div>
+
+    <details>
+      <summary>세금이 어떻게 계산되나요?</summary>
+      <div class="info">
+        <p>복권 당첨금은 세법상 <b>기타소득</b>으로 분류되어 지급 단계에서 세금을 먼저 떼고(원천징수) 지급됩니다.</p>
+        <table>
+          <tr><th>당첨금 구간</th><th>세율</th></tr>
+          <tr><td>200만원 이하</td><td>비과세 (0%)</td></tr>
+          <tr><td>200만원 초과 ~ 3억원 이하</td><td>22%</td></tr>
+          <tr><td>3억원 초과분</td><td>33%</td></tr>
+        </table>
+        <p class="muted">22% = 소득세 20% + 지방소득세 2% · 33% = 소득세 30% + 지방소득세 3%</p>
+        <h3>꼭 알아둘 점</h3>
+        <ul>
+          <li>3억원 초과 시 33%는 <b>초과한 금액에만</b> 붙어요. 예) 10억 당첨 → 3억까진 22%, 나머지 7억에만 33%.</li>
+          <li>200만원은 공제가 아니라 <b>기준선</b>이에요. 200만원을 넘으면 전액에 세금이 붙습니다(과세최저한).</li>
+        </ul>
+        <h3>당첨금 수령 장소</h3>
+        <ul>
+          <li>5등(5천원)·4등(5만원): 판매점 또는 농협은행</li>
+          <li>2등·3등: 농협은행 각 지점</li>
+          <li>1등: 농협은행 본점 (당첨복권 + 신분증 지참)</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    세율은 2026년 기준이며 실제 수령액은 지급 기관 정책에 따라 소폭 다를 수 있어요.<br>
+    본 계산기는 참고용입니다. · 만든이 <a href="#">YourAgentJ</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var TAX_FREE = 2000000;       // 200만원 이하 비과세
+  var TIER = 300000000;         // 3억 기준
+  var R1 = 0.22, R2 = 0.33;
+
+  var amtEl = document.getElementById('amt');
+  var readEl = document.getElementById('read');
+  var resultEl = document.getElementById('result');
+  var breakEl = document.getElementById('break');
+  var netEl = document.getElementById('net');
+  var netReadEl = document.getElementById('netread');
+  var taxEl = document.getElementById('tax');
+  var rateEl = document.getElementById('rate');
+
+  var presets = [
+    {label:'5만원', v:50000},
+    {label:'150만원', v:1500000},
+    {label:'5천만원', v:50000000},
+    {label:'20억 (1등 평균)', v:2000000000},
+    {label:'지우기', v:0}
+  ];
+  var chips = document.getElementById('chips');
+  presets.forEach(function(p){
+    var b = document.createElement('button');
+    b.className='chip'; b.textContent=p.label;
+    b.onclick=function(){ setAmount(p.v); };
+    chips.appendChild(b);
+  });
+
+  function won(n){ return Math.round(n).toLocaleString('ko-KR') + '원'; }
+
+  function korean(n){
+    n = Math.floor(n);
+    if(n === 0) return '';
+    var units = [['조',1e12],['억',1e8],['만',1e4],['',1]];
+    var out = '';
+    var rem = n;
+    units.forEach(function(u){
+      var q = Math.floor(rem / u[1]);
+      if(q > 0){ out += q.toLocaleString('ko-KR') + u[0] + ' '; rem -= q*u[1]; }
+    });
+    return out.trim() + '원';
+  }
+
+  function calc(a){
+    if(a <= TAX_FREE) return {tax:0, t1:0, t2:0, net:a, rate:0, free:a};
+    var t1, t2;
+    if(a <= TIER){ t1 = a*R1; t2 = 0; }
+    else { t1 = TIER*R1; t2 = (a-TIER)*R2; }
+    var tax = t1+t2;
+    return {tax:tax, t1:t1, t2:t2, net:a-tax, rate:tax/a*100, free:0};
+  }
+
+  function setAmount(v){
+    amtEl.value = v ? v.toLocaleString('ko-KR') : '';
+    update();
+    amtEl.focus();
+  }
+
+  function update(){
+    var raw = amtEl.value.replace(/[^0-9]/g,'');
+    var a = parseInt(raw||'0',10);
+    // 입력값 천단위 콤마 유지
+    amtEl.value = a ? a.toLocaleString('ko-KR') : '';
+    readEl.textContent = a ? korean(a) : '';
+
+    if(!a){ resultEl.style.display='none'; breakEl.className='break'; return; }
+
+    var r = calc(a);
+    resultEl.style.display='block';
+    netEl.textContent = won(r.net);
+    netReadEl.textContent = korean(r.net);
+    taxEl.textContent = won(r.tax);
+    rateEl.textContent = (r.rate ? r.rate.toFixed(1) : '0') + '%';
+
+    var rows = '';
+    rows += row('당첨금', won(a));
+    if(r.free){
+      rows += row('비과세 (200만원 이하)', '<span class="muted">세금 없음</span>');
+    } else {
+      var base1 = a <= TIER ? a : TIER;
+      rows += row('22% 구간 세금 ('+won(base1)+')', '-'+won(r.t1));
+      if(r.t2 > 0){
+        rows += row('33% 구간 세금 ('+won(a-TIER)+')', '-'+won(r.t2));
+      }
+    }
+    rows += '<div class="brow total"><span class="lab">실수령액</span><span class="val">'+won(r.net)+'</span></div>';
+    breakEl.innerHTML = rows;
+    breakEl.className = 'break show';
+  }
+
+  function row(lab,val){
+    return '<div class="brow"><span class="lab">'+lab+'</span><span class="val">'+val+'</span></div>';
+  }
+
+  amtEl.addEventListener('input', update);
+})();
+</script>
+</body>
+</html>
