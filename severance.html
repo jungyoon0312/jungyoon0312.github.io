@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퇴직금 계산기 2026 | 예상 퇴직금 바로 계산 (평균임금 기준)</title>
+<meta name="description" content="입사일·퇴사일과 급여만 입력하면 예상 퇴직금을 바로 계산합니다. 연간 상여금·연차수당의 3/12까지 평균임금에 반영한 정확한 퇴직금 계산기.">
+<meta name="keywords" content="퇴직금 계산기, 예상 퇴직금, 평균임금 계산, 퇴직금 계산 방법, 2026 퇴직금">
+<meta property="og:title" content="퇴직금 계산기 2026 | 예상 퇴직금 바로 계산">
+<meta property="og:description" content="입사일·퇴사일과 급여만 넣으면 예상 퇴직금이 바로 나와요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"/>
+<style>
+  :root{
+    --paper:#f6f1e7;--paper-2:#efe7d6;--ink:#1d2a26;--ink-soft:#43564f;
+    --gold:#bd9b3e;--gold-deep:#9a7c28;--green:#1f4d3f;--green-2:#2c6b56;
+    --red:#9c3b2e;--line:#d8cdb6;--shadow:0 18px 50px -22px rgba(29,42,38,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;
+    background:radial-gradient(120% 80% at 50% -10%, #fbf7ee 0%, var(--paper) 45%, var(--paper-2) 100%);
+    color:var(--ink);line-height:1.6;min-height:100vh;
+    padding:clamp(16px,4vw,48px) 16px 64px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:580px}
+  .topmark{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.18em;
+    color:var(--gold-deep);text-transform:uppercase;font-weight:700;margin-bottom:14px;
+    opacity:0;animation:rise .7s .05s forwards}
+  .topmark::before{content:"";width:26px;height:1.5px;background:var(--gold)}
+  h1{font-family:"Gowun Batang",serif;font-weight:700;font-size:clamp(30px,7vw,42px);
+    line-height:1.15;letter-spacing:-.01em;margin-bottom:10px;opacity:0;animation:rise .7s .12s forwards}
+  h1 em{font-style:normal;color:var(--green-2)}
+  .lede{color:var(--ink-soft);font-size:15px;max-width:44ch;margin-bottom:28px;
+    opacity:0;animation:rise .7s .19s forwards}
+  .card{background:#fffdf8;border:1px solid var(--line);border-radius:22px;
+    padding:clamp(20px,5vw,30px);box-shadow:var(--shadow);opacity:0;animation:rise .7s .26s forwards}
+
+  .field{margin-bottom:18px}
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
+  label small{color:#a99f88;font-weight:500;font-size:11.5px}
+  .dates{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  input[type=date]{width:100%;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+    font-family:inherit;font-size:15px;color:var(--ink);padding:13px 14px;outline:0;transition:border-color .2s,box-shadow .2s}
+  input[type=date]:focus{border-color:var(--green-2);box-shadow:0 0 0 4px rgba(44,107,86,.12)}
+  .inputbox{position:relative;display:flex;align-items:center;border:1.5px solid var(--line);
+    border-radius:12px;background:#fff;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+  .inputbox:focus-within{border-color:var(--green-2);box-shadow:0 0 0 4px rgba(44,107,86,.12)}
+  .inputbox input{flex:1;border:0;outline:0;background:transparent;font-family:inherit;font-weight:600;
+    font-size:17px;color:var(--ink);padding:13px 6px 13px 14px;width:100%;text-align:right;font-variant-numeric:tabular-nums}
+  .inputbox .unit{font-size:15px;font-weight:600;color:var(--ink-soft);padding:0 14px 0 4px}
+
+  .result{margin-top:24px;border-radius:18px;overflow:hidden;
+    background:linear-gradient(160deg,var(--green) 0%,#16382e 100%);color:#f3eee0;
+    box-shadow:0 16px 40px -20px rgba(31,77,63,.8);display:none}
+  .result.show{display:block;animation:fade .4s}
+  .result-net{padding:26px 24px 22px;text-align:center}
+  .result-net .cap{font-size:13px;letter-spacing:.1em;color:var(--gold);font-weight:700}
+  .bignum{font-family:"Gowun Batang",serif;font-weight:700;font-size:clamp(34px,9vw,48px);
+    line-height:1.1;margin:6px 0 3px;color:#fdfbf3;font-variant-numeric:tabular-nums}
+  .bigread{font-size:13.5px;color:#cfd9d1}
+
+  .break{margin-top:6px;border:1px solid var(--line);border-radius:14px;background:#fffdf8;overflow:hidden;display:none}
+  .break.show{display:block;animation:fade .4s}
+  .brow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;font-size:14px;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .lab{color:var(--ink-soft)}
+  .brow .val{font-weight:700;font-variant-numeric:tabular-nums}
+
+  .warn{margin-top:18px;border:1px solid #e3c9a0;background:#fdf6e8;border-radius:12px;
+    padding:14px 16px;font-size:13.5px;color:#8a6d2a;display:none}
+  .warn.show{display:block;animation:fade .4s}
+
+  details{margin-top:22px;border-top:1px solid var(--line);padding-top:18px;opacity:0;animation:rise .7s .33s forwards}
+  summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--green-2);list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:"Gowun Batang",serif;font-size:18px;width:18px;display:inline-block}
+  details[open] summary::before{content:"–"}
+  .info{font-size:14px;color:var(--ink-soft);margin-top:14px}
+  .info h3{font-size:14px;color:var(--ink);margin:16px 0 6px;font-weight:700}
+  .info ul{padding-left:18px;margin:6px 0}
+  .info li{margin:4px 0}
+  .info .formula{background:var(--paper);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink);margin:8px 0}
+
+  .hub{margin-top:24px;text-align:center;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    opacity:0;animation:rise .7s .4s forwards}
+  .hub a{display:inline-block;font-size:13px;font-weight:600;color:var(--green-2);text-decoration:none;
+    border:1px solid var(--line);padding:9px 16px;border-radius:999px;background:#fffdf8;transition:all .18s}
+  .hub a:hover{border-color:var(--gold);color:var(--gold-deep)}
+
+  footer{margin-top:22px;font-size:12.5px;color:#a99f88;line-height:1.6;text-align:center;opacity:0;animation:rise .7s .46s forwards}
+  footer a{color:var(--gold-deep)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topmark">예상 퇴직금 계산기</div>
+  <h1>퇴직금<br><em>계산기</em></h1>
+  <p class="lede">입사일·퇴사일과 급여만 입력하면 예상 퇴직금을 바로 계산해 드려요. 상여금·연차수당까지 평균임금에 정확히 반영해요.</p>
+
+  <div class="card">
+    <div class="field">
+      <label>재직 기간</label>
+      <div class="dates">
+        <input type="date" id="join" aria-label="입사일">
+        <input type="date" id="last" aria-label="퇴사일">
+      </div>
+      <label style="margin-top:6px;font-weight:500"><small>왼쪽: 입사일 · 오른쪽: 마지막 근무일</small></label>
+    </div>
+
+    <div class="field">
+      <label for="pay3m">퇴직 전 3개월 급여 총액 <small>세전, 기본급+수당 합계</small></label>
+      <div class="inputbox"><input id="pay3m" type="text" inputmode="numeric" placeholder="0"><span class="unit">원</span></div>
+    </div>
+
+    <div class="field">
+      <label for="bonus">연간 상여금 <small>최근 1년, 없으면 0</small></label>
+      <div class="inputbox"><input id="bonus" type="text" inputmode="numeric" placeholder="0"><span class="unit">원</span></div>
+    </div>
+
+    <div class="field" style="margin-bottom:4px">
+      <label for="annual">연차수당 <small>최근 1년, 없으면 0</small></label>
+      <div class="inputbox"><input id="annual" type="text" inputmode="numeric" placeholder="0"><span class="unit">원</span></div>
+    </div>
+
+    <div class="warn" id="warn"></div>
+
+    <div class="result" id="result">
+      <div class="result-net">
+        <div class="cap">예상 퇴직금 (세전)</div>
+        <div class="bignum" id="sev">0원</div>
+        <div class="bigread" id="sevread"></div>
+      </div>
+    </div>
+
+    <div class="break" id="break"></div>
+
+    <details>
+      <summary>퇴직금은 어떻게 계산되나요?</summary>
+      <div class="info">
+        <p>퇴직금은 <b>1일 평균임금 × 30일 × (재직일수 ÷ 365)</b>로 계산해요. 1년 이상 일한 근로자라면 받을 수 있어요.</p>
+        <div class="formula">
+          평균임금 = (3개월 급여 + 연간상여금 × 3/12 + 연차수당 × 3/12) ÷ 3개월 일수
+        </div>
+        <h3>꼭 알아둘 점</h3>
+        <ul>
+          <li>연간 상여금과 연차수당의 <b>3/12(=25%)</b>가 평균임금에 포함돼요. 이걸 빼먹으면 퇴직금이 실제보다 적게 나와요.</li>
+          <li>1년(365일) 미만 근무 시 법정 퇴직금은 발생하지 않아요.</li>
+          <li>계산된 평균임금이 통상임금보다 적으면, <b>통상임금</b>을 기준으로 계산해요.</li>
+          <li>실제 수령액에서는 <b>퇴직소득세</b>가 별도로 공제돼요. (근속연수공제 덕에 일반 급여 세금보다 부담이 낮은 편)</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <div class="hub">
+    <a href="https://jungyoon0312.github.io/salary.html">💼 연봉 실수령액 계산기</a>
+    <a href="https://jungyoon0312.github.io/">🎰 로또 세금 계산기</a>
+  </div>
+
+  <footer>
+    근로자퇴직급여보장법 기준 · 평균임금 산정 방식에 따른 예상치이며 실제 지급액과 차이가 있을 수 있어요.<br>
+    본 계산기는 참고용입니다. · 만든이 <a href="https://jungyoon0312.github.io/">YourAgentJ</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var ids=['join','last','pay3m','bonus','annual'];
+  var el={}; ids.forEach(function(i){el[i]=document.getElementById(i);});
+  var resultEl=document.getElementById('result'),breakEl=document.getElementById('break'),warnEl=document.getElementById('warn');
+  var sevEl=document.getElementById('sev'),sevReadEl=document.getElementById('sevread');
+
+  function won(n){return Math.round(n).toLocaleString('ko-KR')+'원';}
+  function korean(n){
+    n=Math.floor(n); if(n<=0) return '';
+    var u=[['억',1e8],['만',1e4],['',1]],out='',rem=n;
+    u.forEach(function(x){var q=Math.floor(rem/x[1]);if(q>0){out+=q.toLocaleString('ko-KR')+x[0]+' ';rem-=q*x[1];}});
+    return out.trim()+'원';
+  }
+  function num(id){return parseInt((el[id].value||'').replace(/[^0-9]/g,'')||'0',10);}
+  function fmt(id){var v=num(id);el[id].value=v?v.toLocaleString('ko-KR'):'';}
+  function diffDays(a,b){return Math.round((b-a)/86400000);}
+  function ymd(join,quit){
+    var y=quit.getFullYear()-join.getFullYear();
+    var m=quit.getMonth()-join.getMonth();
+    var d=quit.getDate()-join.getDate();
+    if(d<0){m--; d+=new Date(quit.getFullYear(),quit.getMonth(),0).getDate();}
+    if(m<0){y--; m+=12;}
+    return y+'년 '+m+'개월 '+d+'일';
+  }
+
+  function render(){
+    var jv=el.join.value, lv=el.last.value;
+    resultEl.className='result'; breakEl.className='break'; warnEl.className='warn';
+    if(!jv||!lv) return;
+    var join=new Date(jv), last=new Date(lv);
+    var quit=new Date(last); quit.setDate(quit.getDate()+1);
+    var workDays=diffDays(join,quit);
+    if(workDays<=0){ warnEl.textContent='퇴사일이 입사일보다 빠릅니다. 날짜를 확인해 주세요.'; warnEl.className='warn show'; return; }
+    if(workDays<365){
+      warnEl.innerHTML='재직기간이 <b>'+ymd(join,quit)+'</b> ('+workDays.toLocaleString()+'일)로 1년 미만이에요. 법정 퇴직금 지급 대상이 아니에요.';
+      warnEl.className='warn show'; return;
+    }
+    var pay3m=num('pay3m');
+    if(pay3m<=0) return;
+    var bonus=num('bonus'), annual=num('annual');
+    var pStart=new Date(quit); pStart.setMonth(pStart.getMonth()-3);
+    var pDays=diffDays(pStart,quit);
+    var avgBase=pay3m + bonus*0.25 + annual*0.25;
+    var daily=avgBase/pDays;
+    var sev=daily*30*workDays/365;
+
+    resultEl.className='result show';
+    sevEl.textContent=won(sev);
+    sevReadEl.textContent=korean(sev);
+
+    var h='';
+    h+='<div class="brow"><span class="lab">재직 기간</span><span class="val">'+ymd(join,quit)+'</span></div>';
+    h+='<div class="brow"><span class="lab">총 재직일수</span><span class="val">'+workDays.toLocaleString('ko-KR')+'일</span></div>';
+    h+='<div class="brow"><span class="lab">평균임금 산정기간</span><span class="val">'+pDays+'일</span></div>';
+    h+='<div class="brow"><span class="lab">1일 평균임금</span><span class="val">'+won(daily)+'</span></div>';
+    breakEl.innerHTML=h; breakEl.className='break show';
+  }
+
+  el.pay3m.addEventListener('input',function(){fmt('pay3m');render();});
+  el.bonus.addEventListener('input',function(){fmt('bonus');render();});
+  el.annual.addEventListener('input',function(){fmt('annual');render();});
+  el.join.addEventListener('change',render);
+  el.last.addEventListener('change',render);
+})();
+</script>
+</body>
+</html>
