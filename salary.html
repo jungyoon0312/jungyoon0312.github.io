@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연봉 실수령액 계산기 2026 (갑근세·4대보험) | 월급 실수령액 바로 계산</title>
+<meta name="description" content="2026년 4대보험 요율과 근로소득세를 반영해 연봉·월급에서 세금과 4대보험을 떼고 받는 실수령액을 바로 계산합니다. 부양가족·자녀 공제까지 반영.">
+<meta name="keywords" content="연봉 실수령액 계산기, 갑근세 계산기, 근로소득세 계산기, 월급 실수령액, 4대보험 계산기, 2026 실수령액">
+<meta property="og:title" content="연봉 실수령액 계산기 2026 (갑근세·4대보험)">
+<meta property="og:description" content="연봉만 입력하면 세금·4대보험 떼고 월 실수령액이 바로 나와요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"/>
+<style>
+  :root{
+    --paper:#f6f1e7;--paper-2:#efe7d6;--ink:#1d2a26;--ink-soft:#43564f;
+    --gold:#bd9b3e;--gold-deep:#9a7c28;--green:#1f4d3f;--green-2:#2c6b56;
+    --red:#9c3b2e;--line:#d8cdb6;--shadow:0 18px 50px -22px rgba(29,42,38,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;
+    background:radial-gradient(120% 80% at 50% -10%, #fbf7ee 0%, var(--paper) 45%, var(--paper-2) 100%);
+    color:var(--ink);line-height:1.6;min-height:100vh;
+    padding:clamp(16px,4vw,48px) 16px 64px;display:flex;justify-content:center;
+  }
+  .wrap{width:100%;max-width:580px}
+  .topmark{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.18em;
+    color:var(--gold-deep);text-transform:uppercase;font-weight:700;margin-bottom:14px;
+    opacity:0;animation:rise .7s .05s forwards}
+  .topmark::before{content:"";width:26px;height:1.5px;background:var(--gold)}
+  h1{font-family:"Gowun Batang",serif;font-weight:700;font-size:clamp(28px,6.5vw,40px);
+    line-height:1.15;letter-spacing:-.01em;margin-bottom:10px;opacity:0;animation:rise .7s .12s forwards}
+  h1 em{font-style:normal;color:var(--green-2)}
+  .lede{color:var(--ink-soft);font-size:15px;max-width:44ch;margin-bottom:28px;
+    opacity:0;animation:rise .7s .19s forwards}
+  .card{background:#fffdf8;border:1px solid var(--line);border-radius:22px;
+    padding:clamp(20px,5vw,30px);box-shadow:var(--shadow);opacity:0;animation:rise .7s .26s forwards}
+
+  /* toggle */
+  .toggle{display:flex;background:var(--paper);border-radius:12px;padding:4px;margin-bottom:20px}
+  .toggle button{flex:1;border:0;background:transparent;font-family:inherit;font-size:14px;
+    font-weight:700;color:var(--ink-soft);padding:9px;border-radius:9px;cursor:pointer;transition:all .2s}
+  .toggle button.on{background:#fffdf8;color:var(--green);box-shadow:0 2px 8px -2px rgba(0,0,0,.12)}
+
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
+  .inputbox{position:relative;display:flex;align-items:center;border:1.5px solid var(--line);
+    border-radius:14px;background:#fff;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+  .inputbox:focus-within{border-color:var(--green-2);box-shadow:0 0 0 4px rgba(44,107,86,.12)}
+  #amt{flex:1;border:0;outline:0;background:transparent;font-family:"Gowun Batang",serif;
+    font-weight:700;font-size:clamp(24px,6.5vw,32px);color:var(--ink);
+    padding:15px 6px 15px 18px;width:100%;text-align:right;font-variant-numeric:tabular-nums}
+  .unit{font-family:"Gowun Batang",serif;font-size:20px;font-weight:700;color:var(--ink-soft);padding:0 18px 0 4px}
+  .read{min-height:18px;margin-top:9px;font-size:13.5px;color:var(--green-2);font-weight:600;text-align:right}
+
+  .opts{margin-top:20px;display:grid;gap:14px}
+  .optrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .optrow .ol{font-size:14px;font-weight:600;color:var(--ink)}
+  .optrow .os{font-size:12px;color:#a99f88;display:block;font-weight:500;margin-top:1px}
+  .stepper{display:flex;align-items:center;gap:0;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+  .stepper button{width:38px;height:38px;border:0;background:#fff;font-size:20px;color:var(--green-2);
+    cursor:pointer;font-family:inherit;transition:background .15s}
+  .stepper button:hover{background:var(--paper)}
+  .stepper .num{min-width:38px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;font-size:15px}
+  .switch{position:relative;width:46px;height:27px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:.2s;cursor:pointer}
+  .slider::before{content:"";position:absolute;width:21px;height:21px;left:3px;top:3px;background:#fff;
+    border-radius:50%;transition:.2s}
+  .switch input:checked + .slider{background:var(--green-2)}
+  .switch input:checked + .slider::before{transform:translateX(19px)}
+
+  /* result */
+  .result{margin-top:24px;border-radius:18px;overflow:hidden;
+    background:linear-gradient(160deg,var(--green) 0%,#16382e 100%);color:#f3eee0;
+    box-shadow:0 16px 40px -20px rgba(31,77,63,.8)}
+  .result-net{padding:24px 24px 20px;text-align:center;position:relative}
+  .result-net::after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:1px;background:rgba(243,238,224,.14)}
+  .result-net .cap{font-size:13px;letter-spacing:.1em;color:var(--gold);font-weight:700}
+  .bignum{font-family:"Gowun Batang",serif;font-weight:700;font-size:clamp(32px,8.5vw,46px);
+    line-height:1.1;margin:6px 0 3px;color:#fdfbf3;font-variant-numeric:tabular-nums}
+  .bigread{font-size:13.5px;color:#cfd9d1}
+  .grid2{display:grid;grid-template-columns:1fr 1fr}
+  .gcell{padding:16px 20px;text-align:center}
+  .gcell:first-child{border-right:1px solid rgba(243,238,224,.14)}
+  .gcell .cap{font-size:12px;color:#a9bcb2;font-weight:600}
+  .gcell .v{font-family:"Gowun Batang",serif;font-size:20px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .gcell .v.tax{color:#e7a99a}
+
+  .break{margin-top:6px;border:1px solid var(--line);border-radius:14px;background:#fffdf8;overflow:hidden;display:none}
+  .break.show{display:block;animation:fade .4s}
+  .brow{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;font-size:14px;border-bottom:1px dashed var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .lab{color:var(--ink-soft)}
+  .brow .lab small{color:#a99f88;font-size:11.5px}
+  .brow .val{font-weight:700;font-variant-numeric:tabular-nums}
+  .brow.sub .val{color:var(--red)}
+  .brow.total{background:var(--paper);font-size:15px}
+  .brow.total .val{color:var(--green)}
+  .brow.head{background:#fbf7ee;font-size:12px;color:#a99f88;font-weight:700;letter-spacing:.03em}
+
+  details{margin-top:22px;border-top:1px solid var(--line);padding-top:18px;opacity:0;animation:rise .7s .33s forwards}
+  summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--green-2);list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";font-family:"Gowun Batang",serif;font-size:18px;width:18px;display:inline-block}
+  details[open] summary::before{content:"–"}
+  .info{font-size:14px;color:var(--ink-soft);margin-top:14px}
+  .info h3{font-size:14px;color:var(--ink);margin:16px 0 6px;font-weight:700}
+  .info ul{padding-left:18px;margin:6px 0}
+  .info li{margin:4px 0}
+  .info a{color:var(--gold-deep)}
+
+  .hub{margin-top:24px;text-align:center;opacity:0;animation:rise .7s .4s forwards}
+  .hub a{display:inline-block;font-size:13.5px;font-weight:600;color:var(--green-2);text-decoration:none;
+    border:1px solid var(--line);padding:9px 18px;border-radius:999px;background:#fffdf8;transition:all .18s}
+  .hub a:hover{border-color:var(--gold);color:var(--gold-deep)}
+
+  footer{margin-top:22px;font-size:12.5px;color:#a99f88;line-height:1.6;text-align:center;opacity:0;animation:rise .7s .46s forwards}
+  footer a{color:var(--gold-deep)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topmark">2026 실수령액 계산기</div>
+  <h1>연봉 실수령액 ·<br><em>갑근세 계산기</em></h1>
+  <p class="lede">연봉(또는 월급)만 입력하면 근로소득세와 4대보험을 떼고 실제로 받는 월 실수령액을 바로 계산해 드려요. 2026년 요율 기준이에요.</p>
+
+  <div class="card">
+    <div class="toggle" id="toggle">
+      <button data-mode="year" class="on">연봉 기준</button>
+      <button data-mode="month">월급 기준</button>
+    </div>
+
+    <label for="amt" id="amtLabel">세전 연봉을 입력하세요</label>
+    <div class="inputbox">
+      <input id="amt" type="text" inputmode="numeric" placeholder="0" autocomplete="off" aria-label="금액">
+      <span class="unit">원</span>
+    </div>
+    <div class="read" id="read"></div>
+
+    <div class="opts">
+      <div class="optrow">
+        <div class="ol">부양가족 수 <span class="os">본인 포함 공제대상 가족</span></div>
+        <div class="stepper" data-step="family">
+          <button data-d="-1">−</button><span class="num" id="familyN">1</span><button data-d="1">+</button>
+        </div>
+      </div>
+      <div class="optrow">
+        <div class="ol">8~20세 자녀 수 <span class="os">자녀세액공제 대상</span></div>
+        <div class="stepper" data-step="child">
+          <button data-d="-1">−</button><span class="num" id="childN">0</span><button data-d="1">+</button>
+        </div>
+      </div>
+      <div class="optrow">
+        <div class="ol">식대 비과세 적용 <span class="os">월 20만원 (가장 일반적)</span></div>
+        <label class="switch"><input type="checkbox" id="meal" checked><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <div class="result" id="result" style="display:none">
+      <div class="result-net">
+        <div class="cap">월 실수령액</div>
+        <div class="bignum" id="net">0원</div>
+        <div class="bigread" id="netread"></div>
+      </div>
+      <div class="grid2">
+        <div class="gcell">
+          <div class="cap">월 근로소득세 (갑근세)</div>
+          <div class="v tax" id="incometax">0원</div>
+        </div>
+        <div class="gcell">
+          <div class="cap">월 공제 합계</div>
+          <div class="v" id="totalded">0원</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="break" id="break"></div>
+
+    <details>
+      <summary>어떻게 계산되나요?</summary>
+      <div class="info">
+        <p>월급에서는 <b>4대보험</b>과 <b>근로소득세(갑근세)</b>가 빠져나가요. 이 계산기는 2026년 요율 기준으로 그걸 떼고 남는 금액을 보여줍니다.</p>
+        <h3>4대보험 (2026년 근로자 부담)</h3>
+        <ul>
+          <li>국민연금 4.75% (2026년 인상, 기준소득월액 상한 637만원)</li>
+          <li>건강보험 3.595%</li>
+          <li>장기요양보험 = 건강보험료의 13.14%</li>
+          <li>고용보험 0.9%</li>
+        </ul>
+        <h3>근로소득세 (갑근세)</h3>
+        <p>여기 나오는 근로소득세는 <b>연간 결정세액 기준의 추정치</b>예요. 실제로 매월 떼는 금액(원천징수)은 회사가 적용하는 간이세액표 비율(80·100·120%)과 비과세 항목에 따라 달라지고, 매년 2월 <b>연말정산으로 최종 정산</b>돼요. 정확한 월 원천징수액은 <a href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=6583&cntntsId=7862" target="_blank" rel="noopener">국세청 홈택스 간이세액표</a>에서 조회할 수 있어요.</p>
+        <h3>지방소득세</h3>
+        <p>근로소득세(소득세)의 10%가 지방소득세로 함께 부과돼요.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="hub">
+    <a href="https://jungyoon0312.github.io/">🎰 로또 세금 계산기도 보기 →</a>
+  </div>
+
+  <footer>
+    2026년 4대보험 요율 및 소득세 기준 · 근로소득세는 연간 결정세액 기준 추정치로, 실제 원천징수액과 차이가 있을 수 있어요.<br>
+    본 계산기는 참고용입니다. · 만든이 <a href="https://jungyoon0312.github.io/">YourAgentJ</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var state={mode:'year', amount:0, family:1, child:0, meal:true};
+
+  var amtEl=document.getElementById('amt'),readEl=document.getElementById('read');
+  var amtLabel=document.getElementById('amtLabel');
+  var resultEl=document.getElementById('result'),breakEl=document.getElementById('break');
+  var netEl=document.getElementById('net'),netReadEl=document.getElementById('netread');
+  var incomeTaxEl=document.getElementById('incometax'),totalDedEl=document.getElementById('totalded');
+
+  function won(n){return Math.round(n).toLocaleString('ko-KR')+'원';}
+  function korean(n){
+    n=Math.floor(n); if(n===0) return '';
+    var u=[['억',1e8],['만',1e4],['',1]],out='',rem=n;
+    u.forEach(function(x){var q=Math.floor(rem/x[1]);if(q>0){out+=q.toLocaleString('ko-KR')+x[0]+' ';rem-=q*x[1];}});
+    return out.trim()+'원';
+  }
+
+  function basicTax(base){
+    var b=[[14000000,0.06,0],[50000000,0.15,1260000],[88000000,0.24,5760000],[150000000,0.35,15440000],
+           [300000000,0.38,19940000],[500000000,0.40,25940000],[1000000000,0.42,35940000],[Infinity,0.45,65940000]];
+    for(var i=0;i<b.length;i++){if(base<=b[i][0]) return base*b[i][1]-b[i][2];}
+    return 0;
+  }
+  function annualTax(annualGross,taxFree,family,children,npsAnnual){
+    var tg=Math.max(0,annualGross-taxFree),ec;
+    if(tg<=5000000) ec=tg*0.7;
+    else if(tg<=15000000) ec=3500000+(tg-5000000)*0.4;
+    else if(tg<=45000000) ec=7500000+(tg-15000000)*0.15;
+    else if(tg<=100000000) ec=12000000+(tg-45000000)*0.05;
+    else ec=14750000+(tg-100000000)*0.02;
+    ec=Math.min(ec,20000000);
+    var incomeAmt=tg-ec, personal=family*1500000;
+    var base=Math.max(0,incomeAmt-personal-npsAnnual);
+    var gross=basicTax(base),wtc;
+    if(gross<=1300000) wtc=gross*0.55; else wtc=715000+(gross-1300000)*0.30;
+    var cap;
+    if(tg<=33000000) cap=740000;
+    else if(tg<=70000000) cap=Math.max(660000,740000-(tg-33000000)*0.008);
+    else if(tg<=120000000) cap=500000;
+    else cap=200000;
+    wtc=Math.min(wtc,cap);
+    var child=0;
+    if(children===1) child=150000; else if(children===2) child=350000; else if(children>=3) child=350000+(children-2)*300000;
+    return Math.max(0,gross-wtc-child);
+  }
+
+  function calc(){
+    var annualGross,monthlyGross;
+    if(state.mode==='year'){annualGross=state.amount;monthlyGross=state.amount/12;}
+    else{monthlyGross=state.amount;annualGross=state.amount*12;}
+    if(annualGross<=0) return null;
+    var tfM=state.meal?200000:0;
+    var insBase=Math.max(0,monthlyGross-tfM);
+    var nps=Math.min(Math.max(insBase,400000),6370000)*0.0475;
+    if(insBase<=0) nps=0;
+    var health=insBase*0.03595;
+    var ltc=health*0.1314;
+    var emp=insBase*0.009;
+    var incA=annualTax(annualGross,tfM*12,state.family,state.child,nps*12);
+    var incM=incA/12, localM=incM*0.1;
+    var ins=nps+health+ltc+emp;
+    var totalDed=ins+incM+localM;
+    var net=monthlyGross-totalDed;
+    return {monthlyGross:monthlyGross,annualGross:annualGross,nps:nps,health:health,ltc:ltc,emp:emp,
+      incM:incM,localM:localM,ins:ins,totalDed:totalDed,net:net};
+  }
+
+  function row(lab,val,cls){return '<div class="brow '+(cls||'')+'"><span class="lab">'+lab+'</span><span class="val">'+val+'</span></div>';}
+
+  function render(){
+    var r=calc();
+    if(!r){resultEl.style.display='none';breakEl.className='break';return;}
+    resultEl.style.display='block';
+    netEl.textContent=won(r.net);
+    netReadEl.textContent='연 '+korean(r.net*12);
+    incomeTaxEl.textContent=won(r.incM+r.localM);
+    totalDedEl.textContent=won(r.totalDed);
+
+    var h='';
+    h+=row('세전 월급','+'+won(r.monthlyGross),'');
+    h+='<div class="brow head"><span class="lab">공제 항목</span><span class="val">월 기준</span></div>';
+    h+=row('국민연금 <small>4.75%</small>','-'+won(r.nps),'sub');
+    h+=row('건강보험 <small>3.595%</small>','-'+won(r.health),'sub');
+    h+=row('장기요양 <small>건보료의 13.14%</small>','-'+won(r.ltc),'sub');
+    h+=row('고용보험 <small>0.9%</small>','-'+won(r.emp),'sub');
+    h+=row('근로소득세 <small>추정</small>','-'+won(r.incM),'sub');
+    h+=row('지방소득세 <small>소득세의 10%</small>','-'+won(r.localM),'sub');
+    h+=row('월 공제 합계','-'+won(r.totalDed),'');
+    h+='<div class="brow total"><span class="lab">월 실수령액</span><span class="val">'+won(r.net)+'</span></div>';
+    h+='<div class="brow total"><span class="lab">연 실수령액</span><span class="val">'+won(r.net*12)+'</span></div>';
+    breakEl.innerHTML=h;
+    breakEl.className='break show';
+  }
+
+  // events
+  document.getElementById('toggle').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    state.mode=b.dataset.mode;
+    Array.prototype.forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+    amtLabel.textContent= state.mode==='year' ? '세전 연봉을 입력하세요' : '세전 월급을 입력하세요';
+    readEl.textContent= state.amount?korean(state.amount):'';
+    render();
+  });
+  amtEl.addEventListener('input',function(){
+    var raw=amtEl.value.replace(/[^0-9]/g,''); var a=parseInt(raw||'0',10);
+    state.amount=a; amtEl.value=a?a.toLocaleString('ko-KR'):''; readEl.textContent=a?korean(a):'';
+    render();
+  });
+  document.querySelectorAll('.stepper').forEach(function(s){
+    s.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      var key=s.dataset.step, d=parseInt(b.dataset.d,10);
+      if(key==='family'){state.family=Math.max(1,state.family+d);document.getElementById('familyN').textContent=state.family;}
+      else{state.child=Math.max(0,state.child+d);document.getElementById('childN').textContent=state.child;}
+      render();
+    });
+  });
+  document.getElementById('meal').addEventListener('change',function(){state.meal=this.checked;render();});
+})();
+</script>
+</body>
+</html>
